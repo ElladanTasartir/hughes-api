@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  app:
+    container_name: hughes-api
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/home/app/src:cached
+      - ./package.json:/home/app/package.json:cached
+    networks: 
+      - hughes-api-network
+
+  db:
+    image: postgres:9.4
+    container_name: hughes-api-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=hughes
+      - POSTGRES_PASSWORD=hughes-api
+      - POSTGRES_DB=hughes-db
+    networks:
+      - hughes-api-network
+
+networks:
+  hughes-api-network:
+    external:
+      name: default_services_network
