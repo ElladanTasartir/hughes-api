@@ -6,6 +6,7 @@ const { host, username, password, database, port, logging, synchronize } =
 
 export const ormConfig = {
   type: 'postgres',
+  autoLoadEntities: true,
   host: process.env.NODE_ENV !== 'cli' ? host : 'localhost',
   username,
   password,

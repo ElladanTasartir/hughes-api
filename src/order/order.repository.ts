@@ -1,0 +1,27 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateOrderDTO } from './dtos/create-order.dto';
+import { Client } from './entities/client.entity';
+import { Order } from './entities/order.entity';
+import { OrderStatus } from './enums/order-status.enum';
+
+@Injectable()
+export class OrderRepository {
+  constructor(
+    @InjectRepository(Order)
+    private orderRepository: Repository<Order>,
+  ) {}
+
+  async createNewOrder(
+    createOrderDTO: CreateOrderDTO,
+    client: Client,
+  ): Promise<Order> {
+    const order = this.orderRepository.create(createOrderDTO);
+
+    order.client_id = client.id;
+    order.status = OrderStatus.OPEN;
+
+    return this.orderRepository.save(order);
+  }
+}
