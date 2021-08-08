@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class InitDb1628299701333 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -44,10 +44,18 @@ export class InitDb1628299701333 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('ALTER TABLE orders DROP CONSTRAINT FK_orders_user');
-    await queryRunner.query('ALTER TABLE orders DROP CONSTRAINT FK_orders_plan');
-    await queryRunner.query('ALTER TABLE orders DROP CONSTRAINT FK_orders_client');
-    await queryRunner.query('ALTER TABLE storage DROP CONSTRAINT FK_storage_equipment');
+    await queryRunner.query(
+      'ALTER TABLE orders DROP CONSTRAINT FK_orders_user',
+    );
+    await queryRunner.query(
+      'ALTER TABLE orders DROP CONSTRAINT FK_orders_plan',
+    );
+    await queryRunner.query(
+      'ALTER TABLE orders DROP CONSTRAINT FK_orders_client',
+    );
+    await queryRunner.query(
+      'ALTER TABLE storage DROP CONSTRAINT FK_storage_equipment',
+    );
 
     await queryRunner.query('DROP TABLE storage');
     await queryRunner.query('DROP TABLE equipments');

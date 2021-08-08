@@ -5,7 +5,7 @@ export class AppController {
   @Get()
   healthCheck(): Record<string, string> {
     return {
-      "status": "Alive"
+      status: 'Alive',
     };
   }
 }

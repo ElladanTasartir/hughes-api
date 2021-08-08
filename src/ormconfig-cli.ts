@@ -1,4 +1,4 @@
-import { ormConfig } from "./ormconfig";
+import { ormConfig } from './ormconfig';
 
 export default {
   ...ormConfig,
@@ -7,5 +7,5 @@ export default {
   migrationRun: false,
   cli: {
     migrationsDir: 'migrations',
-  }
-}
+  },
+};
