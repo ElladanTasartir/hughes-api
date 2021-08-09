@@ -8,12 +8,12 @@ import { Client } from './entities/client.entity';
 export class ClientRepository {
   constructor(
     @InjectRepository(Client)
-    private clientRepository: Repository<Client>,
+    private repository: Repository<Client>,
   ) {}
 
   async createNewClient(createClientDTO: CreateClientDTO): Promise<Client> {
-    const createdClient = this.clientRepository.create(createClientDTO);
+    const createdClient = this.repository.create(createClientDTO);
 
-    return this.clientRepository.save(createdClient);
+    return this.repository.save(createdClient);
   }
 }

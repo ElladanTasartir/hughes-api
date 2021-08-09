@@ -8,8 +8,8 @@ import { OrderRepository } from './order.repository';
 import { OrderService } from './order.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Order, Client])],
+  imports: [TypeOrmModule.forFeature([Client, Order])],
   controllers: [OrderController],
-  providers: [OrderService, ClientRepository, OrderRepository],
+  providers: [ClientRepository, OrderRepository, OrderService],
 })
 export class OrderModule {}
