@@ -10,7 +10,7 @@ import { OrderStatus } from './enums/order-status.enum';
 export class OrderRepository {
   constructor(
     @InjectRepository(Order)
-    private orderRepository: Repository<Order>,
+    private readonly orderRepository: Repository<Order>,
   ) {}
 
   async createNewOrder(
@@ -21,6 +21,7 @@ export class OrderRepository {
       plan_id,
       client_id: client.id,
       status: OrderStatus.OPEN,
+      user_id: 'mock-id-foda-se',
     });
 
     return this.orderRepository.save(order);

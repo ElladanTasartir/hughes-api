@@ -10,6 +10,16 @@ import { OrderService } from './order.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Client, Order])],
   controllers: [OrderController],
-  providers: [ClientRepository, OrderRepository, OrderService],
+  providers: [
+    OrderService,
+    {
+      provide: 'CLIENT_REPOSITORY',
+      useClass: ClientRepository,
+    },
+    {
+      provide: 'ORDER_REPOSITORY',
+      useClass: OrderRepository,
+    },
+  ],
 })
 export class OrderModule {}

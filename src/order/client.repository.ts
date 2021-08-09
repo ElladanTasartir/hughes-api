@@ -8,7 +8,7 @@ import { Client } from './entities/client.entity';
 export class ClientRepository {
   constructor(
     @InjectRepository(Client)
-    private repository: Repository<Client>,
+    private readonly repository: Repository<Client>,
   ) {}
 
   async createNewClient(createClientDTO: CreateClientDTO): Promise<Client> {

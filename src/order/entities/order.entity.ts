@@ -8,7 +8,7 @@ import {
 import { v4 as uuid } from 'uuid';
 import { OrderStatus } from '../enums/order-status.enum';
 
-@Entity({ name: 'orders' })
+@Entity('orders')
 export class Order {
   @PrimaryColumn()
   id?: string;
