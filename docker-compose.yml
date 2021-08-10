@@ -11,7 +11,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./src:/home/app/src:cached
+      - .:/home/app:cached
       - ./package.json:/home/app/package.json:cached
     networks: 
       - hughes-api-network
