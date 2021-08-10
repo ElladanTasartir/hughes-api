@@ -2,32 +2,21 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { Order } from './order.entity';
 
-@Entity('clients')
-export class Client {
+@Entity('plans')
+export class Plan {
   @PrimaryColumn()
   id?: string;
 
   @Column()
-  latitude: string;
+  name: string;
 
-  @Column()
-  longitude: string;
-
-  @Column()
-  cpf: string;
-
-  @Column()
-  phone_number: string;
-
-  @OneToMany(() => Order, (order) => order.client)
-  orders: Order[];
+  @Column({ type: 'numeric' })
+  price: number;
 
   @CreateDateColumn()
   created_at: Date;

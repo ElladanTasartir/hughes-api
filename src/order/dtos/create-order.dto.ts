@@ -1,9 +1,10 @@
 import { Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
+import { IsUUID, ValidateNested } from 'class-validator';
 import { CreateClientDTO } from './create-client.dto';
 
 export class CreateOrderDTO {
-  plan_id?: string;
+  @IsUUID()
+  plan_id: string;
 
   @Type(() => CreateClientDTO)
   @ValidateNested()

@@ -19,11 +19,26 @@ export class OrderRepository {
   ): Promise<Order> {
     const order = this.orderRepository.create({
       plan_id,
-      client_id: client.id,
+      client,
       status: OrderStatus.OPEN,
-      user_id: 'mock-id-foda-se',
+      user_id: 'mock-id',
     });
 
     return this.orderRepository.save(order);
+  }
+
+  async findOrders(): Promise<Order[]> {
+    return this.orderRepository.find({
+      relations: ['client', 'plan_id'],
+    });
+  }
+
+  async findOrderByStatus(status: OrderStatus): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: {
+        status,
+      },
+      relations: ['client', 'plan_id'],
+    });
   }
 }
