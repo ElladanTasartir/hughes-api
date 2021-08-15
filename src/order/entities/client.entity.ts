@@ -15,6 +15,9 @@ export class Client {
   id?: string;
 
   @Column()
+  name: string;
+
+  @Column()
   latitude: string;
 
   @Column()

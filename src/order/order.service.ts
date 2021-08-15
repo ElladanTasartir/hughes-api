@@ -1,3 +1,4 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PlanRepository } from 'src/plan/plan.repository';
 import { removeSpecialCharacters } from 'src/utils/removeSpecialCharacters';
@@ -17,6 +18,7 @@ export class OrderService {
     private readonly orderRepository: OrderRepository,
     @Inject('PLAN_REPOSITORY')
     private readonly planRepository: PlanRepository,
+    private readonly mailService: MailerService,
   ) {}
 
   private async createNewClient(
@@ -45,7 +47,22 @@ export class OrderService {
 
     const newClient = await this.createNewClient(client);
 
-    return this.orderRepository.createNewOrder(createOrderDTO, newClient);
+    const createdOrder = await this.orderRepository.createNewOrder(
+      createOrderDTO,
+      newClient,
+    );
+
+    this.mailService.sendMail({
+      to: 'erickmalta100@gmail.com',
+      subject: 'Nova ordem de serviço foi criada!',
+      template: './neworder',
+      context: {
+        name: 'Erick Malta',
+        client,
+      },
+    });
+
+    return createdOrder;
   }
 
   async findOrderByStatus(status: OrderStatus) {

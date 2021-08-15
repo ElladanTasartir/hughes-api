@@ -1,0 +1,69 @@
+<style>
+  .outer-style {
+    background: #E5E5E5;
+  }
+
+  .message-content {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #FF6B00;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 16px;
+    padding: 16px 0;
+  }
+
+  .message-content>p {
+    color: #FFF;
+    font-size: 32px;
+    padding-left: 16px;
+  }
+
+  .message-content>div {
+    background: #FFF;
+    padding: 8px 32px;
+  }
+
+  .message-content h1 {
+    font-size: 18px;
+    color: #FF6B00;
+  }
+
+  .users-info {
+    padding: 16px 32px;
+    margin: 16px auto;
+    max-width: 300px;
+    color: #2f2f2f;
+    background: #E5E5E5;
+  }
+</style>
+
+<div class="outer-style">
+  <div class="message-content">
+    <p>Uma nova Ordem de Serviço foi gerada</p>
+    <div>
+      <h1>Olá, {{name}}</h1>
+      <p>Informações do cliente:</p>
+      <div class="users-info">
+        <p>
+          <strong>Nome:</strong> {{client.name}}
+        </p>
+        <p>
+          <strong>CPF:</strong> {{client.cpf}}
+        </p>
+        <p>
+          <strong>Contato:</strong> {{client.phone_number}}
+        </p>
+        <p>
+          <strong>Latitude:</strong> {{client.latitude}}
+        </p>
+        <p>
+          <strong>Longitude:</strong> {{client.longitude}}
+        </p>
+      </div>
+    </div>
+    <p>
+      Obrigado!<br />
+      <strong>Hughes Admin</strong>
+    </p>
+  </div>
+</div>

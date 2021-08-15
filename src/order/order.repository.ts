@@ -21,7 +21,7 @@ export class OrderRepository {
       plan_id,
       client,
       status: OrderStatus.OPEN,
-      user_id: 'mock-id',
+      user_id: 'e06630c3-20a8-43ab-8f98-c4149c65aebe',
     });
 
     return this.orderRepository.save(order);
@@ -29,7 +29,7 @@ export class OrderRepository {
 
   async findOrders(): Promise<Order[]> {
     return this.orderRepository.find({
-      relations: ['client', 'plan_id'],
+      relations: ['client', 'plan'],
     });
   }
 

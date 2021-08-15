@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
@@ -19,12 +20,16 @@ export class Order {
   @Column()
   user_id: string;
 
-  @ManyToOne(() => Client)
+  @ManyToOne(() => Client, (client) => client.orders)
+  @JoinColumn({ name: 'client_id' })
   client: Client;
 
   @Column()
-  @ManyToOne(() => Plan)
   plan_id: string;
+
+  @ManyToOne(() => Plan, (plan) => plan.id)
+  @JoinColumn({ name: 'plan_id' })
+  plan: Plan;
 
   @Column()
   status: OrderStatus;
