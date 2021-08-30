@@ -15,7 +15,9 @@ export class PlanService {
   }
 
   async createPlan(createPlanDTO: CreatePlanDTO): Promise<Plan> {
-    const { name } = createPlanDTO;
+    const { name, price } = createPlanDTO;
+
+    const parsedPrice = Number(price);
 
     const planAlreadyExists = await this.planRepository.findPlanByName(name);
 
@@ -23,6 +25,9 @@ export class PlanService {
       throw new BadRequestException(`Plan with name "${name}" already exists`);
     }
 
-    return this.planRepository.createPlan(createPlanDTO);
+    return this.planRepository.createPlan({
+      name,
+      price: parsedPrice,
+    });
   }
 }

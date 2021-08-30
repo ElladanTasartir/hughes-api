@@ -584,11 +584,6 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@join-com/class-validator-ismoney@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@join-com/class-validator-ismoney/-/class-validator-ismoney-2.0.0.tgz#ce5db5fc49eb89470ddd9b3c0edf78f47d831aa4"
-  integrity sha512-GIGUgqPGpxfTNd2nb9pZjuUff0InlvH7q3woOGQ0oeS6Y7B/TDXsRLmdWQBoC9phQ8UKiYw2Mm5aGTaRm1GYFQ==
-
 "@jonkemp/package-utils@^1.0.6":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@jonkemp/package-utils/-/package-utils-1.0.7.tgz#6550ea56c9bd61bb4161c99e7ca38b972ad3a25d"

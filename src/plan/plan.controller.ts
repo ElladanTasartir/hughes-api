@@ -14,7 +14,7 @@ export class PlanController {
 
   @Post()
   createPlan(
-    @Body(ValidationPipe) createPlanDTO: CreatePlanDTO,
+    @Body(new ValidationPipe({ transform: true })) createPlanDTO: CreatePlanDTO,
   ): Promise<Plan> {
     return this.planService.createPlan(createPlanDTO);
   }
