@@ -25,6 +25,7 @@
     "typeorm:revert": "yarn typeorm migration:revert"
   },
   "dependencies": {
+    "@join-com/class-validator-ismoney": "^2.0.0",
     "@nestjs-modules/mailer": "^1.6.0",
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
