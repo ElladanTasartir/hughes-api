@@ -1,5 +1,18 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreatePlanDTO } from './dtos/create-plan.dto';
+import { FindPlanDTO } from './dtos/find-plan.dto';
+import { UpdatePlanDTO } from './dtos/update-plan.dto';
 import { Plan } from './entities/plan.entity';
 import { PlanService } from './plan.service';
 
@@ -14,8 +27,22 @@ export class PlanController {
 
   @Post()
   createPlan(
-    @Body(new ValidationPipe({ transform: true })) createPlanDTO: CreatePlanDTO,
+    @Body(ValidationPipe) createPlanDTO: CreatePlanDTO,
   ): Promise<Plan> {
     return this.planService.createPlan(createPlanDTO);
+  }
+
+  @Put('/:id')
+  updatePlan(
+    @Param(ValidationPipe) findPlanDTO: FindPlanDTO,
+    @Body(ValidationPipe) updatePlanDTO: UpdatePlanDTO,
+  ): Promise<Plan> {
+    return this.planService.updatePlan(findPlanDTO.id, updatePlanDTO);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  deletePlan(@Param(ValidationPipe) findPlanDTO: FindPlanDTO): Promise<void> {
+    return this.planService.deletePlan(findPlanDTO.id);
   }
 }

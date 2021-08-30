@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePlanDTO } from './dtos/create-plan.dto';
+import { UpdatePlanDTO } from './dtos/update-plan.dto';
 import { Plan } from './entities/plan.entity';
 
 @Injectable()
@@ -35,5 +36,18 @@ export class PlanRepository {
     const createdPlan = this.planRepository.create(createPlanDTO);
 
     return this.planRepository.save(createdPlan);
+  }
+
+  updatePlan(plan: Plan, updatePlanDTO: UpdatePlanDTO): Promise<Plan> {
+    const { name, price } = updatePlanDTO;
+
+    plan.name = name || plan.name;
+    plan.price = price || plan.price;
+
+    return this.planRepository.save(plan);
+  }
+
+  async deletePlan(plan: Plan): Promise<void> {
+    await this.planRepository.remove(plan);
   }
 }

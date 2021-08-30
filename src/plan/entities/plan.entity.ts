@@ -16,7 +16,7 @@ export class Plan {
   name: string;
 
   @Column({ type: 'numeric' })
-  price: number;
+  price: string;
 
   @CreateDateColumn()
   created_at: Date;

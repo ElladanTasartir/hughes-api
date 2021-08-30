@@ -1,7 +1,8 @@
-import { IsCurrency, IsString } from 'class-validator';
-export class CreatePlanDTO {
+import { IsCurrency, IsOptional, IsString } from 'class-validator';
+export class UpdatePlanDTO {
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
 
   @IsCurrency({
     symbol: 'R$',
@@ -10,5 +11,6 @@ export class CreatePlanDTO {
     allow_negatives: false,
     digits_after_decimal: [2],
   })
-  price: string;
+  @IsOptional()
+  price?: string;
 }
