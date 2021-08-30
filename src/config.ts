@@ -19,6 +19,11 @@ REQUIRED_ENV_VARS.forEach((envVar) => {
   }
 });
 
+export const jwt = {
+  secret: process.env.JWT_SECRET || 'secret',
+  expiresIn: process.env.EXPIRES_IN,
+};
+
 export const mail = {
   email: process.env.EMAIL_ACCOUNT,
   pass: process.env.PASSWORD_ACCOUNT,

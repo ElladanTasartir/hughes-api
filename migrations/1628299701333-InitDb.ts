@@ -11,7 +11,7 @@ export class InitDb1628299701333 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      'CREATE TABLE users (id varchar NOT NULL PRIMARY KEY, email varchar(100) NOT NULL, name varchar NOT NULL, password varchar(50) NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now())',
+      'CREATE TABLE users (id varchar NOT NULL PRIMARY KEY, email varchar(100) NOT NULL, name varchar NOT NULL, password varchar(100) NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now())',
     );
 
     await queryRunner.query(
