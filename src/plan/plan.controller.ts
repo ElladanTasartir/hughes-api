@@ -10,6 +10,7 @@ import {
   Put,
   ValidationPipe,
 } from '@nestjs/common';
+import { GetAuthenticatedUser } from 'src/user/decorators/auth.decorator';
 import { CreatePlanDTO } from './dtos/create-plan.dto';
 import { FindPlanDTO } from './dtos/find-plan.dto';
 import { UpdatePlanDTO } from './dtos/update-plan.dto';
@@ -28,6 +29,7 @@ export class PlanController {
   @Post()
   createPlan(
     @Body(ValidationPipe) createPlanDTO: CreatePlanDTO,
+    @GetAuthenticatedUser() _: string,
   ): Promise<Plan> {
     return this.planService.createPlan(createPlanDTO);
   }
@@ -36,13 +38,17 @@ export class PlanController {
   updatePlan(
     @Param(ValidationPipe) findPlanDTO: FindPlanDTO,
     @Body(ValidationPipe) updatePlanDTO: UpdatePlanDTO,
+    @GetAuthenticatedUser() _: string,
   ): Promise<Plan> {
     return this.planService.updatePlan(findPlanDTO.id, updatePlanDTO);
   }
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deletePlan(@Param(ValidationPipe) findPlanDTO: FindPlanDTO): Promise<void> {
+  deletePlan(
+    @Param(ValidationPipe) findPlanDTO: FindPlanDTO,
+    @GetAuthenticatedUser() _: string,
+  ): Promise<void> {
     return this.planService.deletePlan(findPlanDTO.id);
   }
 }

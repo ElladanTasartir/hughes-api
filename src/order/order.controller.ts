@@ -7,6 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { GetAuthenticatedUser } from 'src/user/decorators/auth.decorator';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { StatusQueryDTO } from './dtos/status-query.dto';
 import { Order } from './entities/order.entity';
@@ -25,6 +26,7 @@ export class OrderController {
   @Get()
   findOrders(
     @Query(ValidationPipe) statusQueryDTO: StatusQueryDTO,
+    @GetAuthenticatedUser() _: string,
   ): Promise<Order[]> {
     const { status } = statusQueryDTO;
 
