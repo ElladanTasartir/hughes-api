@@ -21,7 +21,7 @@ export class OrderRepository {
       plan_id,
       client,
       status: OrderStatus.OPEN,
-      user_id: 'e06630c3-20a8-43ab-8f98-c4149c65aebe',
+      user_id: 'e56b1129-aeeb-4b86-aefd-571f9fd925a8',
     });
 
     return this.orderRepository.save(order);
