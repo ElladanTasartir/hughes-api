@@ -19,9 +19,21 @@ export class UserRepository {
     });
   }
 
+  findUserById(id: string): Promise<User | undefined> {
+    return this.userRepository.findOne(id);
+  }
+
   createUser(signUpUserDTO: SignUpUserDTO): Promise<User> {
     const user = this.userRepository.create(signUpUserDTO);
 
     return this.userRepository.save(user);
+  }
+
+  findUsers(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
+  async deleteUser(user: User): Promise<void> {
+    await this.userRepository.remove(user);
   }
 }
