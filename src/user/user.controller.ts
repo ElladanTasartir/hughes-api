@@ -24,9 +24,9 @@ export class UserController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteUser(
-    @GetAuthenticatedUser() _: string,
+    @GetAuthenticatedUser() user_id: string,
     @Param(ValidationPipe) findUserByIdDTO: FindUserByIdDTO,
   ): Promise<void> {
-    return this.userService.deleteUser(findUserByIdDTO.id);
+    return this.userService.deleteUser(findUserByIdDTO.id, user_id);
   }
 }
