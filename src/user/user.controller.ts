@@ -10,6 +10,7 @@ import {
 import { GetAuthenticatedUser } from './decorators/auth.decorator';
 import { FindUserByIdDTO } from './dtos/find-user-by-id.dto';
 import { User } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
