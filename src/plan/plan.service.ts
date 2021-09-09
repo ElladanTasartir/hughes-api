@@ -33,10 +33,23 @@ export class PlanService {
   }
 
   async updatePlan(id: string, updatePlanDTO: UpdatePlanDTO): Promise<Plan> {
+    const { name } = updatePlanDTO;
+
     const foundPlan = await this.planRepository.findPlanById(id);
 
     if (!foundPlan) {
       throw new NotFoundException(`No plan found with ID "${id}"`);
+    }
+
+    if (name) {
+      const planWithNameAlreadyExists =
+        await this.planRepository.findPlanByName(name);
+
+      if (planWithNameAlreadyExists && planWithNameAlreadyExists.id !== id) {
+        throw new BadRequestException(
+          `A plan with name "${name}" already exists`,
+        );
+      }
     }
 
     return this.planRepository.updatePlan(foundPlan, updatePlanDTO);
