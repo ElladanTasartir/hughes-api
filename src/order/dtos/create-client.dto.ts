@@ -1,10 +1,10 @@
 import {
+  IsEmail,
   IsLatitude,
   IsLongitude,
   IsNotEmpty,
   IsPhoneNumber,
   IsString,
-  Matches,
 } from 'class-validator';
 
 export class CreateClientDTO {
@@ -13,10 +13,10 @@ export class CreateClientDTO {
   name: string;
 
   @IsNotEmpty()
-  @Matches(
-    /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/,
-  )
   cpf: string;
+
+  @IsEmail()
+  email: string;
 
   @IsNotEmpty()
   @IsLatitude()

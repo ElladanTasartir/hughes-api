@@ -1,6 +1,12 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PlanRepository } from 'src/plan/plan.repository';
+import { UserService } from 'src/user/user.service';
 import { removeSpecialCharacters } from 'src/utils/removeSpecialCharacters';
 import { ClientRepository } from './client.repository';
 import { CreateClientDTO } from './dtos/create-client.dto';
@@ -19,6 +25,7 @@ export class OrderService {
     @Inject('PLAN_REPOSITORY')
     private readonly planRepository: PlanRepository,
     private readonly mailService: MailerService,
+    private readonly userService: UserService,
   ) {}
 
   private async createNewClient(
@@ -45,19 +52,30 @@ export class OrderService {
       throw new NotFoundException(`Plan with ID "${plan_id}" not found`);
     }
 
+    const users = await this.userService.getUsers();
+
+    if (!users.length) {
+      throw new BadRequestException(`No users available to respond to order`);
+    }
+
+    const randomIndex = Math.floor(Math.random() * (users.length - 1 - 0) + 0);
+
+    const randomUser = users[randomIndex];
+
     const newClient = await this.createNewClient(client);
 
     const createdOrder = await this.orderRepository.createNewOrder(
       createOrderDTO,
       newClient,
+      randomUser.id,
     );
 
     this.mailService.sendMail({
-      to: 'erickmalta100@gmail.com',
+      to: randomUser.email,
       subject: 'Nova ordem de serviço foi criada!',
       template: './neworder',
       context: {
-        name: 'Erick Malta',
+        name: randomUser.name,
         client,
       },
     });

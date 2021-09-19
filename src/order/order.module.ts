@@ -10,6 +10,7 @@ import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { orderRepositories } from './providers/repositories';
 import { mail } from '../config';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { mail } from '../config';
       },
     }),
     PlanModule,
+    UserModule,
   ],
   controllers: [OrderController],
   providers: [OrderService, ...orderRepositories],

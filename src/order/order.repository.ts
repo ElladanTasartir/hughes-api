@@ -16,12 +16,13 @@ export class OrderRepository {
   async createNewOrder(
     { plan_id }: CreateOrderDTO,
     client: Client,
+    user_id: string,
   ): Promise<Order> {
     const order = this.orderRepository.create({
       plan_id,
       client,
       status: OrderStatus.OPEN,
-      user_id: 'e56b1129-aeeb-4b86-aefd-571f9fd925a8',
+      user_id,
     });
 
     return this.orderRepository.save(order);

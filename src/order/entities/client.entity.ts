@@ -18,6 +18,9 @@ export class Client {
   name: string;
 
   @Column()
+  email: string;
+
+  @Column()
   latitude: string;
 
   @Column()
