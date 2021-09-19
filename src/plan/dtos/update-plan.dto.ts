@@ -4,6 +4,10 @@ export class UpdatePlanDTO {
   @IsOptional()
   name?: string;
 
+  @IsString()
+  @IsOptional()
+  description?: string;
+
   @IsCurrency({
     symbol: 'R$',
     require_symbol: false,

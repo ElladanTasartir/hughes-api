@@ -39,10 +39,11 @@ export class PlanRepository {
   }
 
   updatePlan(plan: Plan, updatePlanDTO: UpdatePlanDTO): Promise<Plan> {
-    const { name, price } = updatePlanDTO;
+    const { name, price, description } = updatePlanDTO;
 
     plan.name = name || plan.name;
     plan.price = price || plan.price;
+    plan.description = description || plan.description;
 
     return this.planRepository.save(plan);
   }

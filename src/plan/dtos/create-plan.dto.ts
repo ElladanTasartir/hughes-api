@@ -3,6 +3,9 @@ export class CreatePlanDTO {
   @IsString()
   name: string;
 
+  @IsString()
+  description: string;
+
   @IsCurrency({
     symbol: 'R$',
     require_symbol: false,

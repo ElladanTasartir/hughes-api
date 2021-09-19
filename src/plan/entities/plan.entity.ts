@@ -18,6 +18,9 @@ export class Plan {
   @Column({ type: 'numeric' })
   price: string;
 
+  @Column()
+  description: string;
+
   @CreateDateColumn()
   created_at: Date;
 
