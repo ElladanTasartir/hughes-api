@@ -39,7 +39,7 @@ export class OrderRepository {
       where: {
         status,
       },
-      relations: ['client', 'plan_id'],
+      relations: ['client', 'plan'],
     });
   }
 }
