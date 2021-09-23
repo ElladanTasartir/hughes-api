@@ -6,6 +6,6 @@ export class AddEmailToClient1632091637125 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('ALTER TABLE clients DROP COLUMN emaiç');
+    await queryRunner.query('ALTER TABLE clients DROP COLUMN email');
   }
 }
