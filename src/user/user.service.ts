@@ -39,7 +39,13 @@ export class UserService {
       }
     }
 
-    if (password) {
+    if (new_password) {
+      if (!password) {
+        throw new BadRequestException(
+          `You must provide user's current password to update user password`,
+        );
+      }
+
       const passwordMatched = await compare(password, userExists.password);
 
       if (!passwordMatched) {

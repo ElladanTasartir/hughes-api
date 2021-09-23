@@ -7,6 +7,8 @@ import {
   Put,
   Body,
   ValidationPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { GetAuthenticatedUser } from './decorators/auth.decorator';
 import { UpdateUserDTO } from './dtos/update-user.dto';
@@ -18,6 +20,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseInterceptors(ClassSerializerInterceptor)
   getUsers(@GetAuthenticatedUser() _: string): Promise<User[]> {
     return this.userService.getUsers();
   }
