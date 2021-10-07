@@ -16,6 +16,10 @@ export class EquipmentService {
     private readonly equipmentRepository: EquipmentRepository,
   ) {}
 
+  getEquipmentById(id: string): Promise<Equipment> {
+    return this.equipmentRepository.findEquipmentById(id);
+  }
+
   getAllEquipments(): Promise<Equipment[]> {
     return this.equipmentRepository.findEquipments();
   }

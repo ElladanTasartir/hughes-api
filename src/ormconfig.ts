@@ -1,6 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { postgres } from './config';
 import { Equipment } from './equipment/entities/equipment.entity';
+import { Storage } from './equipment/entities/storage.entity';
 import { Client } from './order/entities/client.entity';
 import { Order } from './order/entities/order.entity';
 import { Plan } from './plan/entities/plan.entity';
@@ -11,7 +12,7 @@ const { host, username, password, database, port, logging, synchronize } =
 
 export const ormConfig = {
   type: 'postgres',
-  entities: [Client, Order, Plan, User, Equipment],
+  entities: [Client, Order, Plan, User, Equipment, Storage],
   host: process.env.NODE_ENV !== 'cli' ? host : 'localhost',
   username,
   password,
