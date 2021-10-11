@@ -17,7 +17,7 @@ export class StorageRepository {
     });
   }
 
-  insertEquipmentInStorage(
+  async insertEquipmentInStorage(
     insertEquipmentInStorageDTO: InsertEquipmentInStorageDTO,
   ): Promise<Storage> {
     const storagedEquipment = this.storageRepository.create({
@@ -25,7 +25,11 @@ export class StorageRepository {
       last_move: new Date(),
     });
 
-    return this.storageRepository.save(storagedEquipment);
+    await this.storageRepository.save(storagedEquipment);
+
+    return this.storageRepository.findOne(storagedEquipment.id, {
+      relations: ['equipment'],
+    });
   }
 
   findEquipmentInStorage(id: string): Promise<Storage> {
