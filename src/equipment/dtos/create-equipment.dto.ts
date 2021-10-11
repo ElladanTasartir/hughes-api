@@ -1,4 +1,4 @@
-import { IsCurrency, IsNotEmpty, IsString } from 'class-validator';
+import { IsCurrency, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 
 export class CreateEquipmentDTO {
   @IsString()
@@ -18,4 +18,8 @@ export class CreateEquipmentDTO {
   })
   @IsNotEmpty()
   price: string;
+
+  @IsInt()
+  @Min(1)
+  quantity: number;
 }

@@ -8,12 +8,15 @@ import { CreateEquipmentDTO } from './dtos/create-equipment.dto';
 import { UpdateEquipmentDTO } from './dtos/update-equipment.dto';
 import { Equipment } from './entities/equipment.entity';
 import { EquipmentRepository } from './equipment.repository';
+import { StorageRepository } from './storage.repository';
 
 @Injectable()
 export class EquipmentService {
   constructor(
     @Inject('EQUIPMENT_REPOSITORY')
     private readonly equipmentRepository: EquipmentRepository,
+    @Inject('STORAGE_REPOSITORY')
+    private readonly storageRepository: StorageRepository,
   ) {}
 
   getEquipmentById(id: string): Promise<Equipment> {
@@ -27,7 +30,7 @@ export class EquipmentService {
   async createNewEquipment(
     createEquipmentDTO: CreateEquipmentDTO,
   ): Promise<Equipment> {
-    const { name } = createEquipmentDTO;
+    const { name, quantity } = createEquipmentDTO;
 
     const equipmentWithNameAlreadyExists =
       await this.equipmentRepository.findEquipmentByName(name);
@@ -38,7 +41,16 @@ export class EquipmentService {
       );
     }
 
-    return this.equipmentRepository.createEquipment(createEquipmentDTO);
+    const equipment = await this.equipmentRepository.createEquipment(
+      createEquipmentDTO,
+    );
+
+    await this.storageRepository.insertEquipmentInStorage({
+      equipment_id: equipment.id,
+      quantity,
+    });
+
+    return equipment;
   }
 
   async updateEquipment(
