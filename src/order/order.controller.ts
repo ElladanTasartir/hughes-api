@@ -39,6 +39,14 @@ export class OrderController {
     );
   }
 
+  @Post(':id/complete')
+  setOrderComplete(
+    @Param(ValidationPipe) findOrderByIdDTO: FindOrderByIdDTO,
+    @GetAuthenticatedUser() _: string,
+  ): Promise<Order> {
+    return this.orderService.setOrderComplete(findOrderByIdDTO.id);
+  }
+
   @Get()
   findOrders(
     @Query(ValidationPipe) statusQueryDTO: StatusQueryDTO,
@@ -51,5 +59,12 @@ export class OrderController {
     }
 
     return this.orderService.findOrders();
+  }
+
+  @Get(':id')
+  findOrderById(
+    @Param(ValidationPipe) findOrderByIdDTO: FindOrderByIdDTO,
+  ): Promise<Order> {
+    return this.orderService.findOrder(findOrderByIdDTO.id);
   }
 }

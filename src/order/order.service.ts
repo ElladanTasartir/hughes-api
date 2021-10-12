@@ -148,11 +148,28 @@ export class OrderService {
     );
   }
 
-  async findOrderByStatus(status: OrderStatus) {
+  async setOrderComplete(id: string): Promise<Order> {
+    const foundOrder = await this.orderRepository.findOneById(id);
+
+    if (!foundOrder) {
+      throw new NotFoundException(`Order with ID "${id}" does not exist`);
+    }
+
+    return this.orderRepository.changeOrderStatus(
+      foundOrder,
+      OrderStatus.FINISHED,
+    );
+  }
+
+  findOrderByStatus(status: OrderStatus): Promise<Order[]> {
     return this.orderRepository.findOrderByStatus(status);
   }
 
-  async findOrders() {
+  findOrders(): Promise<Order[]> {
     return this.orderRepository.findOrders();
+  }
+
+  findOrder(id: string): Promise<Order> {
+    return this.orderRepository.findOrderById(id);
   }
 }
