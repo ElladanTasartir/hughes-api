@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateEquipmentDTO } from './dtos/create-equipment.dto';
 import { UpdateEquipmentDTO } from './dtos/update-equipment.dto';
 import { Equipment } from './entities/equipment.entity';
@@ -19,6 +19,12 @@ export class EquipmentRepository {
   findEquipmentById(id: string): Promise<Equipment> {
     return this.equipmentRepository.findOne({
       id,
+    });
+  }
+
+  findEquipmentsbyIds(ids: string[]): Promise<Equipment[]> {
+    return this.equipmentRepository.find({
+      id: In(ids),
     });
   }
 

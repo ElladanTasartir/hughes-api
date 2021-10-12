@@ -6,15 +6,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PlanModule } from 'src/plan/plan.module';
 import { Client } from './entities/client.entity';
 import { Order } from './entities/order.entity';
+import { OrderEquipments } from './entities/order_equipment.entity';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { orderRepositories } from './providers/repositories';
+import { UserModule } from '../user/user.module';
 import { mail } from '../config';
-import { UserModule } from 'src/user/user.module';
+import { EquipmentModule } from 'src/equipment/equipment.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Client, Order]),
+    TypeOrmModule.forFeature([Client, Order, OrderEquipments]),
     MailerModule.forRoot({
       defaults: {
         from: '"No Reply" <noreply@hughes.com>',
@@ -34,6 +36,7 @@ import { UserModule } from 'src/user/user.module';
     }),
     PlanModule,
     UserModule,
+    EquipmentModule,
   ],
   controllers: [OrderController],
   providers: [OrderService, ...orderRepositories],

@@ -1,7 +1,9 @@
+import { OrderEquipments } from '../../order/entities/order_equipment.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,6 +22,12 @@ export class Equipment {
 
   @Column({ type: 'numeric' })
   price: string;
+
+  @OneToMany(
+    () => OrderEquipments,
+    (OrderEquipments) => OrderEquipments.equipment,
+  )
+  equipments_order: OrderEquipments[];
 
   @CreateDateColumn()
   created_at: Date;

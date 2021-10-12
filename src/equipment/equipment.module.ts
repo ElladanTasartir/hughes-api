@@ -12,5 +12,6 @@ import { StorageService } from './storage.service';
   imports: [TypeOrmModule.forFeature([Equipment, Storage])],
   controllers: [EquipmentController, StorageController],
   providers: [EquipmentService, StorageService, ...equipmentRepository],
+  exports: [EquipmentService],
 })
 export class EquipmentModule {}

@@ -27,6 +27,32 @@ export class EquipmentService {
     return this.equipmentRepository.findEquipments();
   }
 
+  async getEquipmentsById(ids: string[]): Promise<Equipment[]> {
+    const equipments = await this.equipmentRepository.findEquipmentsbyIds(ids);
+
+    const idsWithoutAnEquipment = ids
+      .map((id) => {
+        const idIsInEquipments = equipments.find(
+          (equipment) => equipment.id === id,
+        );
+
+        if (idIsInEquipments) {
+          return;
+        }
+
+        return id;
+      })
+      .filter(Boolean);
+
+    if (idsWithoutAnEquipment.length) {
+      throw new BadRequestException(
+        `Equipments "${idsWithoutAnEquipment.join(',')}" do not exist`,
+      );
+    }
+
+    return equipments;
+  }
+
   async createNewEquipment(
     createEquipmentDTO: CreateEquipmentDTO,
   ): Promise<Equipment> {
