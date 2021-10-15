@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UsePipes,
   ValidationPipe,
@@ -13,6 +14,7 @@ import { CreateOrderDTO } from './dtos/create-order.dto';
 import { FindOrderByIdDTO } from './dtos/find-order-by-id.dto';
 import { SetOrderInProgressDTO } from './dtos/set-order-in-progress.dto';
 import { StatusQueryDTO } from './dtos/status-query.dto';
+import { UpdateOrderDTO } from './dtos/update-order.dto';
 import { Order } from './entities/order.entity';
 import { OrderService } from './order.service';
 
@@ -45,6 +47,15 @@ export class OrderController {
     @GetAuthenticatedUser() _: string,
   ): Promise<Order> {
     return this.orderService.setOrderComplete(findOrderByIdDTO.id);
+  }
+
+  @Put(':id')
+  updateOrderEquipments(
+    @Param(ValidationPipe) findOrderByIdDTO: FindOrderByIdDTO,
+    @Body(ValidationPipe) updateOrderDTO: UpdateOrderDTO,
+    @GetAuthenticatedUser() _: string,
+  ): Promise<Order> {
+    return this.orderService.updateOrder(findOrderByIdDTO.id, updateOrderDTO);
   }
 
   @Get()

@@ -6,14 +6,15 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { EquipmentService } from 'src/equipment/equipment.service';
-import { PlanRepository } from 'src/plan/plan.repository';
-import { UserService } from 'src/user/user.service';
-import { removeSpecialCharacters } from 'src/utils/removeSpecialCharacters';
+import { EquipmentService } from '../equipment/equipment.service';
+import { PlanRepository } from '../plan/plan.repository';
+import { UserService } from '../user/user.service';
+import { removeSpecialCharacters } from '../utils/removeSpecialCharacters';
 import { ClientRepository } from './client.repository';
 import { CreateClientDTO } from './dtos/create-client.dto';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { SetOrderInProgressDTO } from './dtos/set-order-in-progress.dto';
+import { UpdateOrderDTO } from './dtos/update-order.dto';
 import { Client } from './entities/client.entity';
 import { Order } from './entities/order.entity';
 import { OrderStatus } from './enums/order-status.enum';
@@ -145,6 +146,59 @@ export class OrderService {
     return this.orderRepository.changeOrderStatus(
       foundOrder,
       OrderStatus.IN_PROGRESS,
+    );
+  }
+
+  async updateOrder(
+    id: string,
+    updateOrderDTO: UpdateOrderDTO,
+  ): Promise<Order> {
+    const { equipments } = updateOrderDTO;
+
+    const foundOrder = await this.orderRepository.findOneById(id);
+
+    if (!foundOrder) {
+      throw new NotFoundException(`Order with ID "${id}" does not exist`);
+    }
+
+    if (foundOrder.status !== OrderStatus.IN_PROGRESS) {
+      throw new BadRequestException(
+        `Cannot update an order that's not in progress`,
+      );
+    }
+
+    const foundEquipments = await this.equipmentService.getEquipmentsById(
+      equipments.map((equipment) => equipment.equipment_id),
+    );
+
+    const uniqueFoundEquipments = foundEquipments.map((equipment) => {
+      const firstEquipmentToShow = equipments.find(
+        (currentEquipment) => currentEquipment.equipment_id === equipment.id,
+      );
+
+      return {
+        equipment_id: equipment.id,
+        quantity: firstEquipmentToShow.quantity,
+      };
+    });
+
+    const equipmentsAlreadyInOrder =
+      await this.orderRepository.findOrderEquipmentsByEquipmentIdAndOrderId(
+        id,
+        uniqueFoundEquipments,
+      );
+
+    if (equipmentsAlreadyInOrder.length) {
+      throw new UnprocessableEntityException(
+        `Equipments with ID(s) "${equipmentsAlreadyInOrder
+          .map((equipment) => equipment.equipment_id)
+          .join(',')}" is/are already in order "${id}"`,
+      );
+    }
+
+    return this.orderRepository.updateOrderEquipmentsInOrder(
+      id,
+      uniqueFoundEquipments,
     );
   }
 

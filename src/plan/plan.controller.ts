@@ -10,7 +10,7 @@ import {
   Put,
   ValidationPipe,
 } from '@nestjs/common';
-import { GetAuthenticatedUser } from 'src/user/decorators/auth.decorator';
+import { GetAuthenticatedUser } from '../user/decorators/auth.decorator';
 import { CreatePlanDTO } from './dtos/create-plan.dto';
 import { FindPlanDTO } from './dtos/find-plan.dto';
 import { UpdatePlanDTO } from './dtos/update-plan.dto';
