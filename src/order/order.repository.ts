@@ -133,4 +133,13 @@ export class OrderRepository {
       .where('order.status = :status', { status })
       .getMany();
   }
+
+  async updateOrderEquipmentsInOrder(
+    id: string,
+    orderEquipments: OrderEquipmentDTO[],
+  ): Promise<Order> {
+    await this.insertEquipmentsIntoOrderEquipments(id, orderEquipments);
+
+    return this.findOrderById(id);
+  }
 }

@@ -6,10 +6,10 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { EquipmentService } from 'src/equipment/equipment.service';
-import { PlanRepository } from 'src/plan/plan.repository';
-import { UserService } from 'src/user/user.service';
-import { removeSpecialCharacters } from 'src/utils/removeSpecialCharacters';
+import { EquipmentService } from '../equipment/equipment.service';
+import { PlanRepository } from '../plan/plan.repository';
+import { UserService } from '../user/user.service';
+import { removeSpecialCharacters } from '../utils/removeSpecialCharacters';
 import { ClientRepository } from './client.repository';
 import { CreateClientDTO } from './dtos/create-client.dto';
 import { CreateOrderDTO } from './dtos/create-order.dto';

@@ -10,9 +10,9 @@ import { OrderEquipments } from './entities/order_equipment.entity';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { orderRepositories } from './providers/repositories';
+import { EquipmentModule } from '../equipment/equipment.module';
 import { UserModule } from '../user/user.module';
 import { mail } from '../config';
-import { EquipmentModule } from 'src/equipment/equipment.module';
 
 @Module({
   imports: [
