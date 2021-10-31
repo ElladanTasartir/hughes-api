@@ -3,12 +3,14 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreateEquipmentDTO } from './dtos/create-equipment.dto';
 import { UpdateEquipmentDTO } from './dtos/update-equipment.dto';
 import { Equipment } from './entities/equipment.entity';
 import { EquipmentRepository } from './equipment.repository';
 import { StorageRepository } from './storage.repository';
+import { SetOrderInProgressDTO } from '../order/dtos/set-order-in-progress.dto';
 
 @Injectable()
 export class EquipmentService {
@@ -51,6 +53,79 @@ export class EquipmentService {
     }
 
     return equipments;
+  }
+
+  async takeFromStorage(
+    setOrderInProgressDTO: SetOrderInProgressDTO,
+  ): Promise<void> {
+    const { equipments } = setOrderInProgressDTO;
+
+    const storagedEquipments =
+      await this.storageRepository.findStoragedEquipmentsByIds(
+        equipments.map((equipment) => equipment.equipment_id),
+      );
+
+    for (const equipment of storagedEquipments) {
+      const equipmentFound = equipments.find(
+        (newEquipments) =>
+          equipment.equipment_id === newEquipments.equipment_id,
+      );
+
+      if (!equipmentFound) {
+        throw new BadRequestException(
+          `Equipment with ID "${equipment.id}" not found`,
+        );
+      }
+
+      if (equipment.quantity < equipmentFound.quantity) {
+        throw new UnprocessableEntityException(
+          `Can't take more equipments from equipment ID "${equipment.equipment_id}" than storaged (${equipment.quantity})`,
+        );
+      }
+    }
+
+    await Promise.all(
+      storagedEquipments.map(async (equipment) => {
+        const foundEquipment = equipments.find(
+          (newEquipment) =>
+            newEquipment.equipment_id === equipment.equipment_id,
+        );
+        console.log(foundEquipment);
+        if (!foundEquipment) {
+          return;
+        }
+
+        const newQuantity = equipment.quantity - foundEquipment.quantity;
+
+        return this.storageRepository.changeStorageQuantity(
+          equipment,
+          newQuantity,
+        );
+      }),
+    );
+
+    return;
+  }
+
+  async replenishStorage(
+    equipment_id: string,
+    quantity: number,
+  ): Promise<void> {
+    const foundStoragedEquipment =
+      await this.storageRepository.findEquipmentInStorage(equipment_id);
+
+    if (!foundStoragedEquipment) {
+      throw new NotFoundException(
+        `Storaged Equipment with ID "${equipment_id}" not found`,
+      );
+    }
+
+    const newQuantity = foundStoragedEquipment.quantity + quantity;
+
+    await this.storageRepository.changeStorageQuantity(
+      foundStoragedEquipment,
+      newQuantity,
+    );
   }
 
   async createNewEquipment(

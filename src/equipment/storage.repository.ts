@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InsertEquipmentInStorageDTO } from './dtos/insert-equipment-in-storage.dto';
 import { Storage } from './entities/storage.entity';
 
@@ -42,6 +42,14 @@ export class StorageRepository {
 
   findStorageById(id: string): Promise<Storage> {
     return this.storageRepository.findOne(id);
+  }
+
+  findStoragedEquipmentsByIds(ids: string[]): Promise<Storage[]> {
+    return this.storageRepository.find({
+      where: {
+        equipment_id: In(ids),
+      },
+    });
   }
 
   changeStorageQuantity(storage: Storage, quantity: number): Promise<Storage> {

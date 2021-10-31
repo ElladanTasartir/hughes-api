@@ -13,6 +13,7 @@ import { removeSpecialCharacters } from 'src/utils/removeSpecialCharacters';
 import { ClientRepository } from './client.repository';
 import { CreateClientDTO } from './dtos/create-client.dto';
 import { CreateOrderDTO } from './dtos/create-order.dto';
+import { RemoveEquipmentFromOrderDTO } from './dtos/remove-equipment-from-order.dto';
 import { SetOrderInProgressDTO } from './dtos/set-order-in-progress.dto';
 import { Client } from './entities/client.entity';
 import { Order } from './entities/order.entity';
@@ -88,6 +89,70 @@ export class OrderService {
     return createdOrder;
   }
 
+  async updateOrderEquipments(
+    id: string,
+    setOrderInProgressDTO: SetOrderInProgressDTO,
+  ): Promise<Order> {
+    const { equipments } = setOrderInProgressDTO;
+
+    const foundOrder = await this.orderRepository.findOneById(id);
+
+    if (!foundOrder) {
+      throw new NotFoundException(`Order with ID "${id}" does not exist`);
+    }
+
+    if (foundOrder.status !== OrderStatus.IN_PROGRESS) {
+      throw new BadRequestException(
+        `Cannot update an order that's not in progress`,
+      );
+    }
+
+    if (equipments.length) {
+      const foundEquipments = await this.equipmentService.getEquipmentsById(
+        equipments.map((equipment) => equipment.equipment_id),
+      );
+
+      const uniqueFoundEquipments = foundEquipments.map((equipment) => {
+        const firstEquipmentToShow = equipments.find(
+          (currentEquipment) => currentEquipment.equipment_id === equipment.id,
+        );
+
+        return {
+          equipment_id: equipment.id,
+          quantity: firstEquipmentToShow.quantity,
+        };
+      });
+
+      const equipmentsAlreadyInOrder =
+        await this.orderRepository.findOrderEquipmentsByEquipmentIdAndOrderId(
+          id,
+          uniqueFoundEquipments,
+        );
+
+      const equipmentsThatAreNotInTheOrder = uniqueFoundEquipments.filter(
+        (equipment) => {
+          const equipmentExist = equipmentsAlreadyInOrder.find(
+            (orderEquipments) =>
+              orderEquipments.equipment_id === equipment.equipment_id,
+          );
+
+          return !equipmentExist;
+        },
+      );
+
+      await this.equipmentService.takeFromStorage({
+        equipments: equipmentsThatAreNotInTheOrder,
+      });
+
+      await this.orderRepository.insertEquipmentsIntoOrderEquipments(
+        id,
+        equipmentsThatAreNotInTheOrder,
+      );
+    }
+
+    return this.orderRepository.findOrderById(id);
+  }
+
   async setOrderInProgress(
     id: string,
     setOrderInProgressDTO: SetOrderInProgressDTO,
@@ -136,6 +201,10 @@ export class OrderService {
         );
       }
 
+      await this.equipmentService.takeFromStorage({
+        equipments: uniqueFoundEquipments,
+      });
+
       await this.orderRepository.insertEquipmentsIntoOrderEquipments(
         id,
         uniqueFoundEquipments,
@@ -146,6 +215,46 @@ export class OrderService {
       foundOrder,
       OrderStatus.IN_PROGRESS,
     );
+  }
+
+  async removeEquipmentFromOrder(
+    removeEquipmentFromOrderDTO: RemoveEquipmentFromOrderDTO,
+  ): Promise<void> {
+    const { id, equipment_id } = removeEquipmentFromOrderDTO;
+
+    const foundOrder = await this.findOrder(id);
+
+    if (!foundOrder) {
+      throw new NotFoundException(`Order with ID "${id}" does not exist`);
+    }
+
+    const equipmentExists = await this.equipmentService.getEquipmentById(
+      equipment_id,
+    );
+
+    if (!equipmentExists) {
+      throw new NotFoundException(
+        `Equipment with ID "${equipment_id}" does not exist`,
+      );
+    }
+
+    const foundOrderEquipment = await this.orderRepository.findOrderEquipment(
+      id,
+      equipment_id,
+    );
+
+    if (!foundOrderEquipment) {
+      throw new NotFoundException(
+        `Equipment with ID "${equipment_id}" does not exist in order with ID "${id}"`,
+      );
+    }
+
+    await this.equipmentService.replenishStorage(
+      equipment_id,
+      foundOrderEquipment.quantity,
+    );
+
+    await this.orderRepository.removeEquipmentFromOrder(id, equipment_id);
   }
 
   async setOrderComplete(id: string): Promise<Order> {

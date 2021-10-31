@@ -17,6 +17,28 @@ export class OrderRepository {
     private readonly orderEquipmentsRepository: Repository<OrderEquipments>,
   ) {}
 
+  async removeEquipmentFromOrder(
+    id: string,
+    equipment_id: string,
+  ): Promise<void> {
+    await this.orderEquipmentsRepository.delete({
+      order_id: id,
+      equipment_id,
+    });
+  }
+
+  async findOrderEquipment(
+    id: string,
+    equipment_id: string,
+  ): Promise<OrderEquipments> {
+    return this.orderEquipmentsRepository.findOne({
+      where: {
+        order_id: id,
+        equipment_id,
+      },
+    });
+  }
+
   async createNewOrder(
     { plan_id }: CreateOrderDTO,
     client: Client,
