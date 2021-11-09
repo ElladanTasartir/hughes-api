@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { CreateOrderDTO } from './dtos/create-order.dto';
 import { OrderEquipmentDTO } from './dtos/order-equipment.dto';
 import { Client } from './entities/client.entity';
@@ -36,6 +36,18 @@ export class OrderRepository {
         order_id: id,
         equipment_id,
       },
+    });
+  }
+
+  async findOrderByMonthAndYear(
+    initialDate: Date,
+    finalDate: Date,
+  ): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: {
+        created_at: Between(initialDate, finalDate),
+      },
+      relations: ['plan', 'client'],
     });
   }
 

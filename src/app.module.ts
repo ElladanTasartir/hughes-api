@@ -5,6 +5,7 @@ import { EquipmentModule } from './equipment/equipment.module';
 import { OrderModule } from './order/order.module';
 import { ormConfig } from './ormconfig';
 import { PlanModule } from './plan/plan.module';
+import { ReportModule } from './report/report.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -14,6 +15,7 @@ import { UserModule } from './user/user.module';
     PlanModule,
     UserModule,
     EquipmentModule,
+    ReportModule,
   ],
   controllers: [AppController],
 })

@@ -40,5 +40,6 @@ import { mail } from '../config';
   ],
   controllers: [OrderController],
   providers: [OrderService, ...orderRepositories],
+  exports: [...orderRepositories],
 })
 export class OrderModule {}
