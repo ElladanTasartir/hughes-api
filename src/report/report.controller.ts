@@ -1,5 +1,6 @@
 import { Controller, Get, Query, Res, ValidationPipe } from '@nestjs/common';
 import { Response } from 'express';
+import { GetAuthenticatedUser } from 'src/user/decorators/auth.decorator';
 import { FindReportDTO } from './dtos/find-report.dto';
 import { ReportService } from './report.service';
 
@@ -9,6 +10,7 @@ export class ReportController {
 
   @Get()
   async getReport(
+    @GetAuthenticatedUser() _: string,
     @Query(ValidationPipe) findReportDTO: FindReportDTO,
     @Res() res: Response,
   ) {
