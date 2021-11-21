@@ -45,7 +45,7 @@ export class OrderRepository {
   ): Promise<Order[]> {
     return this.orderRepository.find({
       where: {
-        created_at: Between(initialDate, finalDate),
+        updated_at: Between(initialDate, finalDate),
       },
       relations: ['plan', 'client'],
     });
